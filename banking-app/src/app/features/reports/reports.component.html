@@ -1,0 +1,88 @@
+<h2>Reportes - Estado de Cuenta</h2>
+
+@if (error()) {
+  <div class="error-msg">
+    @for (line of error().split('\n'); track line) {
+      @if (line.trim()) {
+        <div class="error-line">
+          <span class="bullet">—</span> {{ line }}
+        </div>
+      }
+    }
+  </div>
+}
+
+<div class="success-msg" *ngIf="ok()">{{ ok() }}</div>
+
+<!-- FORMULARIO PRINCIPAL -->
+<div class="card">
+  <div class="form-grid">
+
+    <label>
+      Cliente ID
+      <input [(ngModel)]="clientId" name="clientId" />
+    </label>
+
+    <label>
+      Desde
+      <input type="date" [(ngModel)]="from" name="from" />
+    </label>
+
+    <label>
+      Hasta
+      <input type="date" [(ngModel)]="to" name="to" />
+    </label>
+
+  </div>
+
+  <div class="form-actions">
+    <button class="btn-primary" (click)="generate()">Generar</button>
+    <button class="btn-secondary" (click)="downloadPdf()" [disabled]="!data()">Descargar PDF</button>
+  </div>
+</div>
+
+<!-- RESULTADO -->
+<div class="card" *ngIf="data() as d">
+  <h3>Resumen</h3>
+
+  <p><strong>Cliente:</strong> {{ d.report.client }}</p>
+  <p><strong>Periodo:</strong> {{ d.report.from }} - {{ d.report.to }}</p>
+
+  <p>
+    <strong>Créditos:</strong> {{ d.report.totalCredits | number:'1.2-2' }}
+    &nbsp;&nbsp;&nbsp;
+    <strong>Débitos:</strong> {{ d.report.totalDebits | number:'1.2-2' }}
+  </p>
+
+  <table class="table">
+    <thead>
+      <tr>
+        <th>Fecha</th>
+        <th>Cliente</th>
+        <th>Cuenta</th>
+        <th>Tipo</th>
+        <th>Saldo Inicial</th>
+        <th>Estado</th>
+        <th>Movimiento</th>
+        <th>Saldo Disp.</th>
+      </tr>
+    </thead>
+
+    <tbody>
+      <tr *ngFor="let t of d.report.transactions">
+        <td>{{ t.date | date:'short' }}</td>
+        <td>{{ t.client }}</td>
+        <td>{{ t.accountNumber }}</td>
+        <td>{{ t.accountType }}</td>
+        <td>{{ t.initialBalance | number:'1.2-2' }}</td>
+        <td>{{ t.status ? 'Activo' : 'Inactivo' }}</td>
+        <td>{{ t.amount | number:'1.2-2' }}</td>
+        <td>{{ t.balance | number:'1.2-2' }}</td>
+      </tr>
+
+      <tr *ngIf="!d.report.transactions.length">
+        <td colspan="8" class="muted">Sin movimientos</td>
+      </tr>
+    </tbody>
+  </table>
+</div>

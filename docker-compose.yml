@@ -1,0 +1,49 @@
+services:
+
+  mysql:
+    image: mysql:8.0
+    container_name: banking-mysql
+    restart: unless-stopped
+    environment:
+      MYSQL_ROOT_PASSWORD: rootpass
+      MYSQL_DATABASE: banking_db
+      MYSQL_USER: banking_user
+      MYSQL_PASSWORD: 12345Bank
+    ports:
+      - "3306:3306"
+    volumes:
+      - mysql_data:/var/lib/mysql
+      - ./BaseDatos.sql:/docker-entrypoint-initdb.d/BaseDatos.sql:ro
+    healthcheck:
+      test: ["CMD", "mysqladmin", "ping", "-h", "localhost", "-uroot", "-prootpass"]
+      interval: 10s
+      timeout: 5s
+      retries: 10
+
+  banking_api:
+    build: ./banking-api
+    container_name: banking-system-api
+    restart: unless-stopped
+    depends_on:
+      mysql:
+        condition: service_healthy
+    environment:
+      DB_HOST: mysql
+      DB_PORT: 3306
+      DB_NAME: banking_db
+      DB_USER: banking_user
+      DB_PASSWORD: 12345Bank
+    ports:
+      - "8080:8080"
+
+  banking_app:
+    build: ./banking-app
+    container_name: banking-ui
+    restart: unless-stopped
+    depends_on:
+      - banking_api
+    ports:
+      - "4200:80"
+
+volumes:
+  mysql_data:

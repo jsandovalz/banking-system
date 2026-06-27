@@ -1,0 +1,35 @@
+<div class="layout">
+  <aside class="sidebar">
+    <div class="logo">BANCO</div>
+
+    <nav>
+      <a routerLink="/clientes" routerLinkActive="active">
+        <i class="fa fa-users"></i> Clientes
+      </a>
+      <a routerLink="/cuentas" routerLinkActive="active">
+        <i class="fa fa-credit-card"></i> Cuentas
+      </a>
+      <a routerLink="/movimientos" routerLinkActive="active">
+        <i class="fa fa-exchange-alt"></i> Movimientos
+      </a>
+      <a routerLink="/reportes" routerLinkActive="active">
+        <i class="fa fa-chart-line"></i> Reportes
+      </a>
+    </nav>
+  </aside>
+
+  <main class="content">
+    <header class="header">
+      <div class="title">
+        <ng-content select="page-title"></ng-content>
+      </div>
+      <div class="user">
+        <i class="icon-user"></i>
+      </div>
+    </header>
+
+    <section class="page">
+      <router-outlet></router-outlet>
+    </section>
+  </main>
+</div>

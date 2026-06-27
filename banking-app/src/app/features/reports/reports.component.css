@@ -1,0 +1,66 @@
+.card {
+  background: #fff;
+  padding: 20px;
+  border-radius: 12px;
+  box-shadow: 0 4px 10px rgba(0,0,0,0.05);
+  margin-bottom: 20px;
+}
+
+.form-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 12px;
+}
+
+.form-actions {
+  margin-top: 12px;
+  display: flex;
+  gap: 8px;
+}
+
+.table {
+  width: 100%;
+  border-collapse: collapse;
+}
+
+.table th {
+  text-align: left;
+  padding: 12px;
+  background: #f0f2f5;
+  border-bottom: 2px solid #e0e0e0;
+}
+
+.table td {
+  padding: 12px;
+  border-bottom: 1px solid #eee;
+}
+
+.table tr:hover {
+  background: #fafafa;
+}
+
+.muted {
+  text-align: center;
+  color: #777;
+}
+
+.error-msg {
+  background: #ffe6e6;
+  border-left: 4px solid #d9534f;
+  padding: 10px;
+  margin-bottom: 16px;
+  border-radius: 6px;
+}
+
+.error-line {
+  display: flex;
+  gap: 6px;
+}
+
+.success-msg {
+  background: #e6ffe6;
+  border-left: 4px solid #28a745;
+  padding: 10px;
+  margin-bottom: 16px;
+  border-radius: 6px;
+}

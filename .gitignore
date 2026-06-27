@@ -1,0 +1,28 @@
+# Carpetas de dependencias y temporales (Cubre cualquier ubicación)
+**/node_modules/
+**/.angular/
+**/target/
+**/build/
+.gradle/
+bin/
+obj/
+
+# Configuración de Editores (IntelliJ, VS Code)
+.idea/
+.vscode/
+*.iml
+
+# Compilados y salidas
+**/dist/
+out/
+*.jar
+*.war
+
+# Archivos del Sistema y Logs
+.DS_Store
+Thumbs.db
+*.log
+
+# Variables de entorno y secretos
+.env
+.env.*

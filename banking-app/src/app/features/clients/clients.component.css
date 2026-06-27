@@ -1,0 +1,82 @@
+.card {
+  background: #fff;
+  border-radius: 12px;
+  padding: 20px;
+  box-shadow: 0 4px 10px rgba(0,0,0,0.05);
+
+  .card-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+
+    .actions {
+      display: flex;
+      gap: 10px;
+
+      .search {
+        padding: 8px 12px;
+        border-radius: 6px;
+        border: 1px solid #ddd;
+      }
+
+      .btn-primary {
+        background: #F2C94C;
+        border: none;
+        padding: 8px 16px;
+        border-radius: 6px;
+        cursor: pointer;
+        font-weight: 600;
+        transition: 0.2s;
+
+        &:hover {
+          background: #d9b03f;
+        }
+      }
+    }
+  }
+
+  .table {
+    width: 100%;
+    margin-top: 20px;
+    border-collapse: collapse;
+
+    th {
+      text-align: left;
+      padding: 12px;
+      background: #f0f2f5;
+      border-bottom: 2px solid #e0e0e0;
+    }
+
+    td {
+      padding: 12px;
+      border-bottom: 1px solid #eee;
+    }
+
+    tr:hover {
+      background: #fafafa;
+    }
+
+    .btn-small {
+      padding: 6px 12px;
+      border-radius: 4px;
+      background: #1B263B;
+      color: #fff;
+      border: none;
+      cursor: pointer;
+    }
+  }
+}
+.form-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
+.form-grid label { display: flex; flex-direction: column; font-size: 13px; color: #555; }
+.form-grid input, .form-grid select { margin-top: 4px; padding: 8px; border: 1px solid #ddd; border-radius: 6px; }
+.error-msg { background: #ffebee; border: 1px solid #ffcdd2; color: #b71c1c; padding: 8px 12px; border-radius: 6px; margin-bottom: 12px; white-space: pre-line;}
+.error-line {color: #991b1b; font-size: 0.9rem;line-height: 1.5; display: flex; gap: 8px; margin-bottom: 4px;}
+.bullet { color: #f43f5e; font-weight: bold; flex-shrink: 0;}
+.success-msg { background: #e8f5e9; border: 1px solid #c8e6c9; color: #1b5e20; padding: 8px 12px; border-radius: 6px; margin-bottom: 12px; }
+.muted { color: #888; font-size: 13px; }
+.error {
+  color: #d9534f;
+  font-size: 12px;
+  margin-top: 4px;
+}
+

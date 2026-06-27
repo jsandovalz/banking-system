@@ -1,0 +1,211 @@
+{
+  "info": {
+    "name": "Application Programming Interface - Validador",
+    "description": "Coleccion de pruebas. Compatible con Postman v9.13.2.",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+    "_postman_id": "b0e54a18-banco-validador-001"
+  },
+  "variable": [
+    { "key": "baseUrl", "value": "http://localhost:8080/api" },
+    { "key": "clientId", "value": "joselema" },
+    { "key": "accountNumber", "value": "478758" }
+  ],
+  "item": [
+    {
+      "name": "1. Clientes - Listar",
+      "request": {
+        "method": "GET",
+        "header": [],
+        "url": { "raw": "{{baseUrl}}/clientes", "host": ["{{baseUrl}}"], "path": ["clientes"] }
+      },
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "type": "text/javascript",
+            "exec": [
+              "pm.test('Status 200', function () { pm.response.to.have.status(200); });",
+              "pm.test('Es array', function () { pm.expect(pm.response.json()).to.be.an('array'); });"
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "name": "2. Clientes - Crear Jose Lema",
+      "request": {
+        "method": "POST",
+        "header": [{ "key": "Content-Type", "value": "application/json" }],
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"name\": \"Jose Lema\",\n  \"gender\": \"M\",\n  \"age\": 35,\n  \"identification\": \"0102030405\",\n  \"address\": \"Otavalo sn y principal\",\n  \"phone\": \"098254785\",\n  \"clientId\": \"joselema\",\n  \"password\": \"1234\",\n  \"status\": true\n}"
+        },
+        "url": { "raw": "{{baseUrl}}/clientes", "host": ["{{baseUrl}}"], "path": ["clientes"] }
+      },
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "type": "text/javascript",
+            "exec": [
+              "pm.test('201 o 409', function () { pm.expect([201,409]).to.include(pm.response.code); });"
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "name": "3. Cuentas - Crear 478758 (Ahorro)",
+      "request": {
+        "method": "POST",
+        "header": [{ "key": "Content-Type", "value": "application/json" }],
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"accountNumber\": \"478758\",\n  \"accountType\": \"AHORRO\",\n  \"initialBalance\": 2000,\n  \"status\": true,\n  \"clientId\": \"joselema\"\n}"
+        },
+        "url": { "raw": "{{baseUrl}}/cuentas", "host": ["{{baseUrl}}"], "path": ["cuentas"] }
+      },
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "type": "text/javascript",
+            "exec": [
+              "pm.test('201 o 409', function () { pm.expect([201,409]).to.include(pm.response.code); });"
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "name": "4. Movimientos - Retiro 575 sobre 478758",
+      "request": {
+        "method": "POST",
+        "header": [{ "key": "Content-Type", "value": "application/json" }],
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"accountNumber\": \"478758\",\n  \"transactionType\": \"RETIRO\",\n  \"amount\": 575\n}"
+        },
+        "url": { "raw": "{{baseUrl}}/movimientos", "host": ["{{baseUrl}}"], "path": ["movimientos"] }
+      },
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "type": "text/javascript",
+            "exec": [
+              "pm.test('201 creado', function () { pm.response.to.have.status(201); });",
+              "pm.test('saldo coherente', function () { pm.expect(pm.response.json().saldo).to.be.a('number'); });"
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "name": "5. Movimientos - Retiro mayor a saldo (espera 400 Saldo no disponible)",
+      "request": {
+        "method": "POST",
+        "header": [{ "key": "Content-Type", "value": "application/json" }],
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"accountNumber\": \"495878\",\n  \"transactionType\": \"RETIRO\",\n  \"amount\": 100\n}"
+        },
+        "url": { "raw": "{{baseUrl}}/movimientos", "host": ["{{baseUrl}}"], "path": ["movimientos"] }
+      },
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "type": "text/javascript",
+            "exec": [
+              "pm.test('400 Bad Request', function () { pm.response.to.have.status(400); });",
+              "pm.test('Mensaje Saldo no disponible', function () { pm.expect(pm.response.json().message).to.eql('Saldo no disponible'); });"
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "name": "6. Movimientos - Cupo diario excedido",
+      "request": {
+        "method": "POST",
+        "header": [{ "key": "Content-Type", "value": "application/json" }],
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"accountNumber\": \"478758\",\n  \"transactionType\": \"RETIRO\",\n  \"amount\": 1500\n}"
+        },
+        "url": { "raw": "{{baseUrl}}/movimientos", "host": ["{{baseUrl}}"], "path": ["movimientos"] }
+      },
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "type": "text/javascript",
+            "exec": [
+              "pm.test('400 cupo excedido', function () { pm.response.to.have.status(400); });",
+              "pm.test('Mensaje cupo', function () { pm.expect(pm.response.json().message).to.eql('Cupo diario Excedido'); });"
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "name": "7. Reportes - Estado de cuenta JSON+PDF",
+      "request": {
+        "method": "GET",
+        "header": [],
+        "url": {
+          "raw": "{{baseUrl}}/reportes?clientId={{clientId}}&from=2022-02-01&to=2030-12-31",
+          "host": ["{{baseUrl}}"],
+          "path": ["reportes"],
+          "query": [
+            { "key": "clientId", "value": "{{clientId}}" },
+            { "key": "from", "value": "2022-02-01" },
+            { "key": "to", "value": "2030-12-31" }
+          ]
+        }
+      },
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "type": "text/javascript",
+            "exec": [
+              "pm.test('200 OK', function () { pm.response.to.have.status(200); });",
+              "pm.test('Incluye reporte y pdfBase64', function () { var j = pm.response.json(); pm.expect(j.reporte).to.be.an('object'); pm.expect(j.pdfBase64).to.be.a('string'); });"
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "name": "8. Reportes - PDF binario",
+      "request": {
+        "method": "GET",
+        "header": [],
+        "url": {
+          "raw": "{{baseUrl}}/reportes/pdf?clientId={{clientId}}&from=2022-02-01&to=2030-12-31",
+          "host": ["{{baseUrl}}"],
+          "path": ["reportes", "pdf"],
+          "query": [
+            { "key": "clientId", "value": "{{clientId}}" },
+            { "key": "from", "value": "2022-02-01" },
+            { "key": "to", "value": "2030-12-31" }
+          ]
+        }
+      },
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "type": "text/javascript",
+            "exec": [
+              "pm.test('200 PDF', function () { pm.response.to.have.status(200); });",
+              "pm.test('Content-Type pdf', function () { pm.expect(pm.response.headers.get('Content-Type')).to.include('application/pdf'); });"
+            ]
+          }
+        }
+      ]
+    }
+  ]
+}

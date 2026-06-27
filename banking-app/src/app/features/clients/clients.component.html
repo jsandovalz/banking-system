@@ -1,0 +1,116 @@
+<div class="card">
+  <div class="card-header">
+    <h2>Clientes</h2>
+    @if (error()) {
+    <div class="error-msg">
+        @for (line of error().split('\n'); track line) {
+            @if (line.trim()) {
+                <div class="error-line">
+                    <span class="bullet">—</span> {{ line }}
+                </div>
+            }
+        }
+    </div>
+    }
+    <div class="success-msg" *ngIf="ok()">{{ ok() }}</div>
+
+    <div class="actions">
+      <input type="text" placeholder="Buscar..." [(ngModel)]="filter" class="search" />
+      <button class="btn-primary" (click)="newClient()">Nuevo</button>
+    </div>
+  </div>
+
+  <table class="table" >
+    <thead>
+      <tr>
+        <th>Client ID</th>
+        <th>Nombre</th>
+        <th>Identificación</th>
+        <th>Telefono</th>
+        <th>Estado</th>
+        <th></th>
+      </tr>
+    </thead>
+
+    <tbody>
+      <tr *ngFor="let c of onFilters()">
+        <td>{{ c.clientId }}</td>
+        <td>{{ c.name }}</td>
+        <td>{{ c.identification }}</td>
+        <td>{{ c.phone }}</td>
+        <td>{{ c.status ? 'Activo' : 'Inactivo' }}</td>
+        <td>
+          <button class="btn-small" (click)="editClient(c)">Editar</button>
+          <button class="btn-danger" (click)="onDelete(c)">Eliminar</button>
+        </td>
+      </tr>
+    </tbody>
+  </table>
+  <div  *ngIf="form()">
+        <h3>{{ form()!.id ? 'Editar' : 'Nuevo' }} Cliente</h3>
+        <form (ngSubmit)="onSave()" #f="ngForm">
+            <div class="form-grid">
+
+                <label>
+                    Nombre
+                    <input name="name" [(ngModel)]="form()!.name" required #name="ngModel" />
+                </label>
+
+                <label>
+                    Identificación
+                    <input name="identification" [(ngModel)]="form()!.identification" required #identification="ngModel" />
+                </label>
+
+                <label>
+                    Género
+                    <select name="gender" [(ngModel)]="form()!.gender" required #gender="ngModel">
+                        <option value="M">M</option>
+                        <option value="F">F</option>
+                        <option value="O">O</option>
+                    </select>
+                </label>
+
+                <label>
+                    Edad
+                    <input type="number" name="age" [(ngModel)]="form()!.age" required min="1" #age="ngModel" />
+                </label>
+
+                <label>
+                    Dirección
+                    <input name="address" [(ngModel)]="form()!.address" required #address="ngModel" />
+                </label>
+
+                <label>
+                    Teléfono
+                    <input name="phone" [(ngModel)]="form()!.phone" required #phone="ngModel" />
+                </label>
+
+                <label>
+                    Cliente ID
+                    <input name="clientId" [(ngModel)]="form()!.clientId" required #clientId="ngModel" />
+                </label>
+
+                <label>
+                    Contraseña
+                    <input type="password" name="password" [(ngModel)]="form()!.password" required #password="ngModel" />
+                </label>
+
+                <label>
+                    Estado
+                    <select name="status" [(ngModel)]="form()!.status">
+                        <option [ngValue]="true">Activo</option>
+                        <option [ngValue]="false">Inactivo</option>
+                    </select>
+                </label>
+
+            </div>
+
+            <div style="margin-top:12px;display:flex;gap:8px;">
+                <button class="card.btn-primary" type="submit">Guardar</button>
+                <button class="btn-secondary" type="button" (click)="onCancel()">Cancelar</button>
+            </div>
+        </form>
+
+        
+    </div>
+</div>
